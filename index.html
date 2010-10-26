@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>$.ui.swipable</title>
+<script src="jquery-1.4.3.min.js"></script>
+<script src="jquery-ui-1.8.5.custom.min.js"></script>
+<script src="jquery.ui.swipable.js"></script>
+<style>
+*{
+	margin:0;
+	padding:0;
+	list-style-type:none;
+}
+body{
+	padding:1em;
+}
+h1{
+	padding:0 0 .5em;
+}
+#all{
+	position:absolute;
+	padding:5%;
+	left:10%;
+	top:10%;
+	right:10%;
+	bottom:10%;
+	background:#333;
+	color:#fff;
+	font-size:2em;
+}
+#rebindLR{
+	position:absolute;
+	right:10px;
+	bottom:10px;
+	width:100px;
+}
+#unbindLR{
+	position:absolute;
+	right:120px;
+	bottom:10px;
+	width:100px;
+}
+</style>
+<script>
+$(function(){
+
+	// console
+	var myConsole = (function(){
+		var max = 6;
+		var lis = [];
+		return {
+			log: function(text){
+				var li = $('<li />').text(text);
+				li.appendTo('#myConsole');
+				lis.push(li);
+				if(lis.length>8){
+					lis.shift().remove();
+				}
+			}
+		}
+	})();
+
+	var el = $('#all');
+	el.swipable();
+
+	var r = function(){ myConsole.log('right'); };
+	var l = function(){ myConsole.log('left'); };
+	var t = function(){ myConsole.log('top'); };
+	var b = function(){ myConsole.log('bottom'); };
+
+	el.bind('swipe.right', r);
+	el.bind('swipe.left', l);
+	el.bind('swipe.top', t);
+	el.bind('swipe.bottom', b);
+
+	var unbindLR = function(){
+		el.unbind('swipe.right', r);
+		el.unbind('swipe.left', l);
+	};
+
+	var rebindLR = function(){
+		el.bind('swipe.right', r);
+		el.bind('swipe.left', l);
+	};
+
+	$('#unbindLR').click(unbindLR);
+	$('#rebindLR').click(rebindLR);
+
+});
+</script>
+</head>
+<body>
+
+	<div id="all">
+		<h1>$.ui.swipable</h1>
+		<ul id="myConsole"></ul>
+		<button id="unbindLR">unbind LR</button>
+		<button id="rebindLR">bind LR</button>
+	</div>
+
+</body>
+</html>
